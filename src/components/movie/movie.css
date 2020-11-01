@@ -1,11 +1,27 @@
 .movie-container {
+    height: 281px;
+    width: 40%;
+    font-family: Inter;
     display: flex;
     flex-direction: row;
-    box-shadow: 0px 4px 12px 0px #000000 15%;
+    filter: drop-shadow(0px 4px 12px rgba(0, 0, 0, 0.15));
+    margin: 16px;
+    background-color: #fff;
+overflow: hidden;
 }
 
 .movie-date {
-    
+font-family: Inter;
+font-style: normal;
+font-weight: normal;
+font-size: 12px;
+line-height: 22px;
+/* identical to box height, or 183% */
+
+display: flex;
+align-items: center;
+
+color: #827E7E;    
 }
 
 .movie-stats {
@@ -20,12 +36,24 @@
 }
 
 .movie-description {
+/* @font-size-sm: 12px */
+
+font-family: Inter;
+font-style: normal;
+font-weight: normal;
+font-size: 12px;
+line-height: 22px;
+/* or 183% */
+
+color: #000000;
+
 }
 
 .movie-img {
-    width: 183px;
-    /* width: 40%; */
-    /* align-self: flex-start; */
+    /* width: 183px; */
+    width: 30%;
+    align-self: flex-start;
     object-fit: contain;
+    /* height: 281px; */
     
 }

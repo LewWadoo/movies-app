@@ -1,0 +1,55 @@
+class TmdbService {
+    constructor() {
+        this._baseURL = "https://api.themoviedb.org/3";
+        
+        this.getResource = async (url) => {
+            const fullURL = `${this._baseURL}${url}`;
+            const result = await fetch(fullURL);
+
+            if (!result.ok) {
+                throw new Error(`Could not fetch ${fullURL}, recieved ${result.status}`);
+            }
+            
+            const body = await result.json();
+            return body;
+        };
+
+        this.getAllPlanets = async () => {
+            const planets = await this.getResource("/planets/");
+            return planets.results;
+        };
+
+        this.getAllPeople = async () => {
+            const people = await this.getResource("/people/");
+            return people.results;
+        };
+
+        this.getAllStarships = async () => {
+            const starships = await this.getResource("/starships/");
+            return starships.results;
+        };
+
+        this.getPerson = async (id) => {
+            return await this.getResource(`/people/${id}/`);
+        };
+
+        this.getPlanet = async (id) => {
+            return await this.getResource(`/planets/${id}/`);
+        };
+
+        this.getStarship = async (id) => {
+            return await this.getResource(`/starships/${id}/`);
+        };
+
+    };
+};
+
+
+const tmdb = new TmdbService();
+
+tmdb.getAllPeople().then((people) => {
+    people.forEach((person) => {
+        console.log(person.name);
+    });
+});
+
