@@ -25,7 +25,9 @@ color: #827E7E;
 }
 
 .movie-stats {
-    margin: 12px 20px 49px 20px;
+    display: flex;
+    flex-direction: column;
+    margin: 12px 20px 0px 20px;
 }
 
 .movie-genres {
@@ -46,7 +48,7 @@ line-height: 22px;
 /* or 183% */
 
 color: #000000;
-
+margin-bottom: auto;
 }
 
 .movie-img {
@@ -56,4 +58,13 @@ color: #000000;
     object-fit: contain;
     /* height: 281px; */
     
+}
+
+.header {
+    display: flex;
+    
+}
+
+.title {
+    margin-right: auto;
 }

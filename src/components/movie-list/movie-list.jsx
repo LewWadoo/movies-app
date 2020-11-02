@@ -1,36 +1,24 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 import Movie from '../movie';
-import TmdbService from '../../services/tmdb-service';
 
 import './movie-list.css';
 
-export default class MovieList extends React.Component {
-  constructor(props) {
-    super(props);
+const MovieList = ({ movies }) => {
+  const moviesView = movies.map((movie) => {
+    return <Movie {...movie} key={movie.id} />;
+  });
 
-    this.tmdbService = new TmdbService();
+  return <ul className="movie-list">{moviesView}</ul>;
+};
 
-    this.state = {
-      movies: [],
-    };
+export default MovieList;
 
-    this.tmdbService.searchMovies('return').then((movies) => {
-      this.setState({
-        movies,
-      });
-    });
-  }
+MovieList.defaultProps = {
+  movies: [],
+};
 
-  render() {
-    const { movies } = this.state;
-
-    return (
-      <ul className="movie-list">
-        {movies.map((movie) => {
-          return <Movie {...movie} key={movie.id} />;
-        })}
-      </ul>
-    );
-  }
-}
+MovieList.propTypes = {
+  movies: PropTypes.arrayOf(PropTypes.object),
+};
