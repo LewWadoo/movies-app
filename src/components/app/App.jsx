@@ -1,5 +1,6 @@
 import React from 'react';
 import { Input, Spin, Alert } from 'antd';
+import { debounce } from 'lodash';
 
 import MovieList from '../movie-list';
 import TmdbService from '../../services/tmdb-service';
@@ -28,7 +29,10 @@ export default class App extends React.Component {
       });
     };
 
-    this.onSearch = () => {
+    this.search = () => {
+      this.setState({
+        isLoading: true,
+      });
       const { searchString } = this.state;
 
       this.tmdbService
@@ -41,17 +45,26 @@ export default class App extends React.Component {
               movies,
               isLoading: false,
               error: false,
-              searchString: '',
             });
           }
         })
         .catch(this.handleError);
     };
 
+    this.componentDidMount = () => {
+      this.debouncedSearch = debounce(this.search, 500);
+    };
+
     this.onChange = (event) => {
+      if (!event) {
+        return;
+      }
+
       this.setState({
         searchString: event.currentTarget.value,
       });
+
+      this.debouncedSearch();
     };
   }
 
@@ -73,7 +86,6 @@ export default class App extends React.Component {
             placeholder="Type to search…"
             prefix={<TMDbIcon />}
             size="small"
-            onSearch={this.onSearch}
             onChange={this.onChange}
             value={searchString}
           />
