@@ -2,18 +2,14 @@ export default class TmdbService {
   constructor() {
     this.baseURL = 'https://api.themoviedb.org/3';
 
-    this.api_key = '7f4ae495fb8b4511c86da94230d39db1';
+    this.apiKey = '7f4ae495fb8b4511c86da94230d39db1';
 
-    this.getResource = async (url, query, language, allowAdult) => {
-      const searchUrl = `${this.baseURL}${url}`;
-      const apiKey = `7f4ae495fb8b4511c86da94230d39db1`;
-      const fullURL = `${searchUrl}?query=${query}&api_key=${apiKey}&include_adult=${allowAdult}&language=${language}`;
-
+    this.getResource = async (url) => {
       let result;
       try {
-        result = await fetch(fullURL);
+        result = await fetch(url);
         if (!result.ok) {
-          throw new Error(`Could not fetch ${searchUrl}, recieved ${result.status}`);
+          throw new Error(`Could not fetch ${url}, recieved ${result.status}`);
         }
       } catch (error) {
         throw new Error(error);
@@ -28,16 +24,14 @@ export default class TmdbService {
       return body;
     };
 
-    this.searchMovies = async (query, language, allowAdult) => {
-      let movies;
-      try {
-        // eslint-disable-next-line no-debugger
-        // debugger;
-        movies = await this.getResource('/search/movie', query, language, allowAdult);
-      } catch (error) {
-        // eslint-disable-next-line no-debugger
-        // debugger;
-      }
+    this.searchMovies = async (query, page, language, allowAdult) => {
+      const searchUrl = `${this.baseURL}${'/search/movie'}`;
+      const fullUrl = `${searchUrl}?query=${query}&api_key=${this.apiKey}&page=${page}&include_adult=${allowAdult}&language=${language}`;
+      // eslint-disable-next-line no-console
+      console.log(fullUrl);
+
+      const movies = await this.getResource(fullUrl);
+
       return movies.results;
     };
   }

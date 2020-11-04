@@ -1,1 +1,21 @@
 @import '~antd/dist/antd.css';
+
+.App {
+    display: flex;
+    flex-direction: column;
+};
+
+.searchContainer {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+}
+
+.search {
+    align-self: flex-end;;
+}
+
+.tmdbIcon {
+    height: 40px;
+    align-self: flex-start;
+}

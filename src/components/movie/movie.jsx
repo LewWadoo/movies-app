@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { format } from 'date-fns';
-import { Rate } from 'antd';
+import { Rate, Image } from 'antd';
 /* Image */
 import './movie.css';
 
@@ -36,9 +36,9 @@ export default class Movie extends React.Component {
 
     return (
       <li className="movie-container">
-        {/* <Image alt="movie" src={imageSrc} /> */}
+        <Image alt="movie" src={imageSrc} />
         {/* className="movie-img" */}
-        <img alt="poster" src={imageSrc} className="movie-img" />
+        {/* <img alt="poster" src={imageSrc} className="movie-img" /> */}
         <div className="movie-stats">
           <div className="header">
             <h5 className="title">{originalTitle}</h5>
