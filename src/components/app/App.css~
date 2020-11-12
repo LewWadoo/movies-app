@@ -1,8 +1,20 @@
 @import '~antd/dist/antd.css';
 
-.App {
+.app {
     display: flex;
     flex-direction: column;
+    align-items: center;
+};
+
+.tabPane {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+};
+
+.tabs {
+    display: flex;
+    align-items: center;
 };
 
 .searchContainer {

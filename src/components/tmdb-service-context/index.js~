@@ -1,0 +1,9 @@
+import {
+  TmdbServiceProvider,
+  TmdbServiceConsumer
+} from './tmdb-service-context.jsx';
+
+export {
+  TmdbServiceProvider,
+  TmdbServiceConsumer
+};

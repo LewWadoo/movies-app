@@ -1,0 +1,12 @@
+import React from 'react';
+
+const {
+  Provide: TmdbServiceProvider,
+  Consumer: TmdbServiceConsumer
+} = React.createContext();
+
+export {
+  TmdbServiceProvider,
+  TmdbServiceConsumer
+
+};

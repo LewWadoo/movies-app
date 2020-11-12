@@ -1,9 +1,10 @@
 import React from 'react';
-import { Input, Spin, Alert, Pagination } from 'antd';
+import { Input, Spin, Alert, Pagination, Tabs } from 'antd';
 import { debounce } from 'lodash';
 
 import MovieList from '../movie-list';
 import TmdbService from '../../services/tmdb-service';
+import { TmdbServiceProvider } from '../tmdb-service-context';
 
 import './app.css';
 import tmdbIcon from './tmdb.svg';
@@ -17,6 +18,7 @@ export default class App extends React.Component {
         currentPage: 1,
         searchString: '',
         movies: [],
+        totalResults: 0,
       },
       isLoading: false,
       error: false,
@@ -31,6 +33,7 @@ export default class App extends React.Component {
           searchString,
           currentPage: 1,
           movies: [],
+          totalResults: 0,
         },
         isLoading: false,
         error: true,
@@ -51,6 +54,7 @@ export default class App extends React.Component {
             searchString,
             currentPage: page,
             movies: [],
+            totalResults: 0,
           },
           isLoading: false,
           error: false,
@@ -66,21 +70,25 @@ export default class App extends React.Component {
           currentPage: page,
           searchString,
           movies,
+          totalResults: 0,
         },
         isLoading: true,
         error: false,
         message: '',
       });
       this.tmdbService
-        .searchMovies(searchString, page, 'en-US', false)
-        .then((newMovies) => {
-          if (newMovies.length === 0 && searchString.length > 0) {
+        .searchMovies(searchString, page, 'en-US', true)
+        .then((response) => {
+          const { results } = response;
+          const totalResults = response.total_results;
+          if (totalResults === 0 && searchString.length > 0) {
             if (page > 1) {
               this.setState({
                 search: {
                   movies: [],
                   searchString,
                   currentPage: page,
+                  totalResults: 0,
                 },
                 isLoading: false,
                 error: false,
@@ -89,9 +97,10 @@ export default class App extends React.Component {
             } else {
               this.setState({
                 search: {
-                  movies: newMovies,
+                  movies: results,
                   searchString,
                   currentPage: page,
+                  totalResults,
                 },
                 isLoading: false,
                 error: true,
@@ -101,9 +110,10 @@ export default class App extends React.Component {
           } else {
             this.setState({
               search: {
-                movies: newMovies,
+                movies: results,
                 searchString,
                 currentPage: page,
+                totalResults,
               },
               isLoading: false,
               error: false,
@@ -115,6 +125,7 @@ export default class App extends React.Component {
 
     this.componentDidMount = () => {
       this.tmdbService = new TmdbService();
+
       this.debouncedSearch = debounce(this.search, 500);
     };
 
@@ -132,6 +143,7 @@ export default class App extends React.Component {
           currentPage: 1,
           movies,
           searchString: event.currentTarget.value,
+          totalResults: 0,
         },
         isLoading: true,
       });
@@ -142,7 +154,7 @@ export default class App extends React.Component {
 
   render() {
     const { error, isLoading, message, search } = this.state;
-    const { movies, searchString, currentPage } = search;
+    const { movies, searchString, currentPage, totalResults } = search;
 
     const spinner = isLoading ? <Spin /> : null;
     const alert = error ? <Alert message={message} type="error" /> : null;
@@ -150,21 +162,40 @@ export default class App extends React.Component {
     const didSearch = isLoading || error || movies !== [];
     const data = hasData && didSearch ? <MovieList movies={movies} /> : null;
 
+    // const rated = <MovieList movies={ratedMovies}/>;
+    const { TabPane } = Tabs;
+
     return (
-      <div className="App">
-        <div className="searchContainer">
-          <Input.Search
-            placeholder="Type to search…"
-            prefix={<img alt="TMDb" src={tmdbIcon} className="tmdbIcon" />}
-            size="small"
-            onChange={this.onChange}
-            value={searchString}
-          />
-        </div>
-        {spinner}
-        {alert}
-        {data}
-        <Pagination current={currentPage} pageSize={10} responsive onChange={this.search} total={50} />
+      <div className="app">
+        <TmdbServiceProvider value={this.tmdbService}>
+          <Tabs defaultActiveKey="1" className="app">
+            <TabPane tab="Search" key="1" className="app">
+              <div className="searchContainer">
+                <Input.Search
+                  placeholder="Type to search…"
+                  prefix={<img alt="TMDb" src={tmdbIcon} className="tmdbIcon" />}
+                  size="small"
+                  onChange={this.onChange}
+                  value={searchString}
+                />
+              </div>
+              {spinner}
+              {alert}
+              {data}
+              <Pagination
+                current={currentPage}
+                pageSize={20}
+                responsive
+                onChange={this.search}
+                total={totalResults}
+                showSizeChanger={false}
+              />
+            </TabPane>
+            <TabPane tab="Rated" key="2" className="tabPane">
+              {data}
+            </TabPane>
+          </Tabs>
+        </TmdbServiceProvider>
       </div>
     );
   }
