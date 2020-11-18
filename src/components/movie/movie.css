@@ -1,70 +1,44 @@
 .movie-container {
-    /* height: 281px; */
     width: 40%;
     font-family: Inter;
     display: flex;
     flex-direction: row;
+    flex-grow: 1;
     filter: drop-shadow(0px 4px 12px rgba(0, 0, 0, 0.15));
     margin: 16px;
     background-color: #fff;
 overflow: hidden;
 }
 
-.movie-date {
-font-family: Inter;
-font-style: normal;
-font-weight: normal;
-font-size: 12px;
-line-height: 22px;
-/* identical to box height, or 183% */
-
-display: flex;
-align-items: center;
-
-color: #827E7E;    
-}
-
-.movie-stats {
-    display: flex;
-    flex-direction: column;
-    margin: 12px 20px 0px 20px;
-}
-
-.movie-genres {
-
-}
-
-.movie-genre {
-}
-
-.movie-description {
-/* @font-size-sm: 12px */
-
-font-family: Inter;
-font-style: normal;
-font-weight: normal;
-font-size: 12px;
-line-height: 22px;
-/* or 183% */
-
-color: #000000;
-margin-bottom: auto;
+@media screen and (max-width: 1000px) {
+    .movie-container{
+	width: 100%;
+	flex-direction: column;
+    }
 }
 
 .movie-img {
-    /* width: 183px; */
     width: 30%;
     align-self: flex-start;
     object-fit: contain;
     /* height: 281px; */
-    
 }
 
-.header {
+@media screen and (max-width: 1000px) {
+.movie-img {
+    width: 20%;
+}
+}
+
+.movie-desktop-layout {
     display: flex;
-    
+    flex-direction: column;
+    flex-grow: 1;
+    /* margin: 16px; */
 }
 
-.title {
-    margin-right: auto;
+.movie-mobile-layout {
+    display: flex;
+    flex-direction: row;
+    flex-grow: 1;
 }

@@ -1,24 +1,19 @@
-@import '~antd/dist/antd.css';
-
 .app {
     display: flex;
     flex-direction: column;
     align-items: center;
-};
-
-.tabs {
-    display: flex;
-    align-items: center;
-};
-
-.searchContainer {
-    display: flex;
-    flex-direction: row;
-    justify-content: flex-start;
 }
 
-.search {
-    align-self: flex-end;;
+.center-layout {
+    display: flex;
+   flex-direction: column;
+      align-items: center;
+}
+
+.search-bar {
+    width: 95%;
+    margin-left: 16px;
+    margin-bottom: 8px;
 }
 
 .tmdbIcon {

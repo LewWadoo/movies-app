@@ -1,6 +1,6 @@
 export default class TmdbService {
   constructor() {
-    this.baseURL = 'https://api.themoviedb.org/3';
+    this.baseUrl = 'https://api.themoviedb.org/3';
 
     this.apiKey = '7f4ae495fb8b4511c86da94230d39db1';
 
@@ -24,31 +24,62 @@ export default class TmdbService {
       return body;
     };
 
+    this.getRating = async (id) => {
+      const getRatingUrl = `${this.baseUrl}/movie/${id}/account_states`;
+
+      if (this.guestSessionId === null) {
+        this.guestSessionId = await this.createGuestSession();
+      }
+      const fullUrl = await `${getRatingUrl}?&api_key=${this.apiKey}&guest_session_id=${this.guestSessionId}`;
+
+      let value;
+      try {
+        const response = await fetch(fullUrl);
+        if (!response.ok) {
+          throw new Error('Паника! Плохо написанная функция получения рейтинга фильма ломает всю программу!');
+        }
+
+        const result = await response.json();
+        const rated = await result.rated;
+        value = await rated.value;
+      } catch (error) {
+        // eslint-disable-next-line no-alert
+        alert(error);
+      }
+      return value;
+    };
+
+    this.getRatingBound = this.getRating.bind(this);
+
     this.searchMovies = async (query, page, language, allowAdult) => {
-      const searchUrl = `${this.baseURL}${'/search/movie'}`;
+      const searchUrl = `${this.baseUrl}${'/search/movie'}`;
       const fullUrl = `${searchUrl}?query=${query}&api_key=${this.apiKey}&page=${page}&include_adult=${allowAdult}&language=${language}`;
 
-      return this.getResource(fullUrl);
+      const response = await this.getResource(fullUrl);
+      const results = await response.results;
+      const totalResults = await response.total_results;
+
+      return {
+        results,
+        totalResults,
+      };
     };
 
     this.createGuestSession = async () => {
-      const guestSessionUrl = `$(this.baseURL}/authentication/guest_session/new`;
+      const guestSessionUrl = `${this.baseUrl}/authentication/guest_session/new`;
       const fullUrl = `${guestSessionUrl}?&api_key=${this.apiKey}`;
 
       let response;
       try {
         response = await this.getResource(fullUrl);
-        if (!response.ok) {
+        if (!response.success) {
           throw new Error('No guest sessions today!');
         }
       } catch (error) {
         return null;
       }
 
-      const guestSessionObject = await response.json();
-      // eslint-disable-next-line no-console
-      console.log('guestSessionObject', guestSessionObject);
-      const guestSessionId = guestSessionObject.guest_session_id;
+      const guestSessionId = await response.guest_session_id;
 
       return guestSessionId;
     };
@@ -56,19 +87,17 @@ export default class TmdbService {
     this.guestSessionId = null;
 
     this.rate = async (value, id) => {
-      const rateUrl = `${this.baseURL}/movie/${id}/rating`;
+      const rateUrl = `${this.baseUrl}/movie/${id}/rating`;
       if (this.guestSessionId === null) {
-        this.guestSessionId = this.createGuestSession();
+        this.guestSessionId = await this.createGuestSession();
       }
       const fullUrl = `${rateUrl}?&api_key=${this.apiKey}&guest_session_id=${this.guestSessionId}`;
-      //             	      // eslint-disable-next-line no-debugger
-      // debugger;
 
-      // const rating = value;
+      const rating = { value };
       const fetchOptions = {
         method: 'POST',
         headers: { 'Content-Type': 'application/json;charset=utf-8' },
-        body: { value },
+        body: JSON.stringify(rating),
       };
 
       let response;
@@ -77,10 +106,30 @@ export default class TmdbService {
         if (!response.ok) {
           throw new Error(`Твоё мнение здесь никого не волнует!`);
         }
+
+        this.getRatedMovies();
       } catch (error) {
         // eslint-disable-next-line no-alert
         alert(error);
       }
+    };
+
+    this.getRatedMovies = async () => {
+      if (this.guestSessionId === null) {
+        this.guestSessionId = await this.createGuestSession();
+      }
+
+      const getRatingUrl = `${this.baseUrl}/guest_session/${this.guestSessionId}/rated/movies`;
+      const fullUrl = `${getRatingUrl}?&api_key=${this.apiKey}`;
+
+      return this.getResource(fullUrl);
+    };
+
+    this.getAllGenres = async () => {
+      const genresUrl = `${this.baseUrl}/genre/movie/list`;
+      const fullUrl = `${genresUrl}?&api_key=${this.apiKey}`;
+
+      return this.getResource(fullUrl);
     };
   }
 }
