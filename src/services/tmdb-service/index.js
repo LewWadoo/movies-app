@@ -33,25 +33,7 @@ export default class TmdbService {
       const fullUrl = await `${getRatingUrl}?&api_key=${this.apiKey}&guest_session_id=${this.guestSessionId}`;
 
       return this.getResource(fullUrl);
-
-      // let value;
-      // try {
-      //   const response = await fetch(fullUrl);
-      //   if (!response.ok) {
-      //     throw new Error('Паника! Плохо написанная функция получения рейтинга фильма ломает всю программу!');
-      //   }
-
-      //   const result = await response.json();
-      //   const rated = await result.rated;
-      //   value = await rated.value;
-      // } catch (error) {
-      //   // eslint-disable-next-line no-alert
-      //   alert(error);
-      // }
-      // return value;
     };
-
-    // this.getRatingBound = this.getRating.bind(this);
 
     this.searchMovies = async (query, page, language, allowAdult) => {
       const searchUrl = `${this.baseUrl}${'/search/movie'}`;

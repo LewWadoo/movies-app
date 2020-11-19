@@ -7,7 +7,7 @@ import TmdbService from '../../services/tmdb-service';
 import { TmdbServiceProvider } from '../tmdb-service-context';
 
 import '../../../node_modules/antd/dist/antd.css';
-import './app.css';
+import './App.css';
 
 import tmdbIcon from './tmdb.svg';
 
@@ -17,10 +17,14 @@ export default class App extends React.Component {
 
     this.state = {
       currentPage: 1,
+      queryRatedMoviesPage: 1,
       searchString: '',
       movies: [],
       ratedMovies: [],
+      queryRatedMovies: [],
       totalResults: 0,
+      ratedCount: 0,
+      totalQueryRatingResults: 0,
       isLoading: false,
       error: false,
       message: '',
@@ -56,8 +60,6 @@ export default class App extends React.Component {
     this.search = async (page = 1) => {
       const { movies, searchString } = this.state;
       if (!searchString) {
-        // eslint-disable-next-line no-console
-        console.log('in search: !searchString', searchString);
         this.setState({
           searchString: '',
           currentPage: page,
@@ -81,7 +83,7 @@ export default class App extends React.Component {
       });
 
       try {
-        const response = await this.tmdbService.searchMovies(searchString, page, 'en-US', true);
+        const response = await this.tmdbService.searchMovies(searchString, page, 'en-US', false);
         const results = await response.results;
         const totalResults = await response.totalResults;
         const moviesWithRating = await results.map((movie) => {
@@ -152,21 +154,6 @@ export default class App extends React.Component {
       this.debouncedSearch();
     };
 
-    this.getRatedMovies = async (page = 1) => {
-      const rated = await this.tmdbService.getRatedMovies(page);
-      const ratedPage = await rated.page;
-      // if (ratedPage > totalPages) {
-      //   ratedPage = totalPages;
-      // }
-      const ratedMovies = await rated.results;
-      const ratedCount = await rated.total_results;
-      this.setState({
-        ratedMovies,
-        ratedCount,
-        ratedPage,
-      });
-    };
-
     this.findIndexByID = (array, id) => {
       if (typeof array === 'undefined') {
         return null;
@@ -209,6 +196,7 @@ export default class App extends React.Component {
 
         return {
           ratedMovies: newRatedMovies,
+          ratedCount: state.ratedCount + 1,
         };
       });
     };
@@ -226,6 +214,31 @@ export default class App extends React.Component {
         this.changeRating(value, indexInMovies, 'movies');
       }
     };
+
+    this.getQueryRatedMovies = async (page = 1) => {
+      const responseJson = await this.tmdbService.getRatedMovies();
+      try {
+        const queryRatedMovies = await responseJson.results;
+        const totalQueryRatingResults = await responseJson.total_results;
+        this.setState({
+          queryRatedMovies,
+          totalQueryRatingResults,
+          queryRatedMoviesPage: page,
+        });
+      } catch (error) {
+        this.setState({
+          isLoading: false,
+          error: true,
+          message: error,
+        });
+      }
+    };
+
+    this.handleTabChange = (activeKey) => {
+      if (activeKey === '3') {
+        this.getQueryRatedMovies();
+      }
+    };
   }
 
   render() {
@@ -234,12 +247,14 @@ export default class App extends React.Component {
       isLoading,
       message,
       movies,
+      totalQueryRatingResults,
+      queryRatedMovies,
+      queryRatedMoivesPage,
       searchString,
       currentPage,
       totalResults,
       ratedMovies,
       ratedCount,
-      ratedPage,
     } = this.state;
 
     const spinner = isLoading ? <Spin /> : null;
@@ -248,15 +263,16 @@ export default class App extends React.Component {
     const didSearch = isLoading || error || movies !== [];
     const data = hasData && didSearch ? <MovieList movies={movies} onRate={this.handleRate} /> : null;
 
-    const ratedData = <MovieList onRate={this.handleRate} movies={ratedMovies} />;
+    const ratedData = ratedMovies === [] ? null : <MovieList onRate={this.handleRate} movies={ratedMovies} />;
+    const queryRatedData =
+      queryRatedMovies === [] ? null : <MovieList onRate={this.handleRate} movies={queryRatedMovies} />;
     const { TabPane } = Tabs;
 
     return (
       <div className="app">
         <TmdbServiceProvider value={this.allMovieGenres}>
-          <Tabs defaultActiveKey="1" className="center-layout">
+          <Tabs defaultActiveKey="1" className="center-layout" onChange={this.handleTabChange}>
             <TabPane tab="Search" key="1" className="center-layout">
-              {/* <div className="search-container"> */}
               <Input.Search
                 placeholder="Type to search…"
                 prefix={<img alt="TMDb" src={tmdbIcon} className="tmdbIcon" />}
@@ -265,7 +281,6 @@ export default class App extends React.Component {
                 value={searchString}
                 className="search-bar"
               />
-              {/* </div> */}
               {spinner}
               {alert}
               {data}
@@ -280,23 +295,16 @@ export default class App extends React.Component {
             </TabPane>
             <TabPane tab="Rated" key="2" className="center-layout">
               {ratedData}
-              <Pagination
-                current={ratedPage}
-                pageSize={20}
-                responsive
-                onChange={this.getRatedMovies}
-                total={ratedCount}
-                showSizeChanger={false}
-              />
+              <Pagination pageSize={20} responsive total={ratedCount} showSizeChanger={false} />
             </TabPane>
             <TabPane tab="Rated from Server" key="3" className="center-layout">
-              {/* {queryRatedData} */}
+              {queryRatedData}
               <Pagination
-                /* current={queryRatedPage} */
+                current={queryRatedMoivesPage}
                 pageSize={20}
                 responsive
                 onChange={this.getQueryRatedMovies}
-                /* total={queryRatedCount} */
+                total={totalQueryRatingResults}
                 showSizeChanger={false}
               />
             </TabPane>

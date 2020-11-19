@@ -5,22 +5,13 @@ import Movie from '../movie';
 
 import './movie-list.css';
 
-export default class MovieList extends React.Component {
-  constructor(props) {
-    super(props);
+const MovieList = ({ movies, onRate }) => {
+  const moviesView = movies.map((movie) => {
+    return <Movie onRate={onRate} {...movie} />;
+  });
 
-    this.state = {};
-  }
-
-  render() {
-    const { movies, onRate } = this.props;
-    const moviesView = movies.map((movie) => {
-      return <Movie onRate={onRate} {...movie} key={movie.id} />;
-    });
-
-    return <ul className="movie-list">{moviesView}</ul>;
-  }
-}
+  return <ul className="movie-list">{moviesView}</ul>;
+};
 
 MovieList.defaultProps = {
   movies: [],
@@ -30,3 +21,5 @@ MovieList.propTypes = {
   movies: PropTypes.arrayOf(PropTypes.object),
   onRate: PropTypes.func.isRequired,
 };
+
+export default MovieList;

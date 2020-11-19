@@ -69,10 +69,9 @@ export default class Movie extends React.Component {
     const imageSrc = posterPath === null ? '' : `https://image.tmdb.org/t/p/w500${posterPath}`;
 
     const desktopLayout = (
-      <li className="movie-container">
+      <li className="movie-container" key={id}>
         <img alt="poster" src={imageSrc} className="movie-img" />
         <div className="movie-desktop-layout">
-          {' '}
           <MovieHeader
             genreIds={genreIds}
             voteAverage={voteAverage}
@@ -85,9 +84,8 @@ export default class Movie extends React.Component {
     );
 
     const mobileLayout = (
-      <li className="movie-container">
+      <li className="movie-container" key={id}>
         <div className="movie-mobile-layout">
-          {' '}
           <img alt="poster" src={imageSrc} className="movie-img" />
           <MovieHeader
             genreIds={genreIds}
@@ -102,14 +100,7 @@ export default class Movie extends React.Component {
 
     const layoutContainer = layout === 'desktop' ? desktopLayout : mobileLayout;
 
-    // eslint-disable-next-line no-console
-    console.log('layout', layout);
-
-    return (
-      // desktopLayout
-      // mobileLayout
-      layoutContainer
-    );
+    return layoutContainer;
   }
 }
 
