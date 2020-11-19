@@ -289,6 +289,17 @@ export default class App extends React.Component {
                 showSizeChanger={false}
               />
             </TabPane>
+            <TabPane tab="Rated from Server" key="3" className="center-layout">
+              {/* {queryRatedData} */}
+              <Pagination
+                /* current={queryRatedPage} */
+                pageSize={20}
+                responsive
+                onChange={this.getQueryRatedMovies}
+                /* total={queryRatedCount} */
+                showSizeChanger={false}
+              />
+            </TabPane>
           </Tabs>
         </TmdbServiceProvider>
       </div>
