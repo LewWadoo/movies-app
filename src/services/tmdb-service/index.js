@@ -88,14 +88,15 @@ export default class TmdbService {
       try {
         response = await fetch(fullUrl, fetchOptions);
         if (!response.ok) {
-          throw new Error(`Твоё мнение здесь никого не волнует!`);
+          throw new Error(`Tell me to fix this bug!`);
         }
 
         this.getRatedMovies();
       } catch (error) {
-        // eslint-disable-next-line no-alert
-        alert(error);
+        return error;
       }
+
+      return null;
     };
 
     this.getRatedMovies = async () => {

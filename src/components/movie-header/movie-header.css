@@ -4,7 +4,6 @@ font-style: normal;
 font-weight: normal;
 font-size: 12px;
 line-height: 22px;
-/* identical to box height, or 183% */
 
 display: flex;
 align-items: center;
@@ -37,27 +36,28 @@ color: #827E7E;
     line-height: 28px;
 }
 
-.voteAverage {
+.vote-average {
     width: 30px;
     height: 30px;
     border: 2px solid;
     border-radius: 15px;
     padding-top: 2px;
     text-align: center;
+    margin-left: 5px;
 }
 
-.voteBad {
+.vote-bad {
     border-color: #E90000;
 }
 
-.votePoor {
+.vote-poor {
     border-color: #E97E00;
 }
 
-.voteGood {
+.vote-good {
     border-color: #E9D100;
 }
 
-.voteAwesome {
+.vote-awesome {
     border-color: #66E900;
 }

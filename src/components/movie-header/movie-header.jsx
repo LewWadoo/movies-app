@@ -12,18 +12,18 @@ export default class MovieHeader extends React.Component {
 
     this.getVoteColorClass = (vote) => {
       if (vote < 3) {
-        return 'voteBad';
+        return 'vote-bad';
       }
 
       if (vote < 5) {
-        return 'votePoor';
+        return 'vote-poor';
       }
 
       if (vote < 7) {
-        return 'voteGood';
+        return 'vote-good';
       }
 
-      return 'voteAwesome';
+      return 'vote-awesome';
     };
 
     this.getGenreNames = (genreIds, allMovieGenres) => {
@@ -42,7 +42,7 @@ export default class MovieHeader extends React.Component {
   render() {
     const { originalTitle, releaseDate, voteAverage, genreIds } = this.props;
 
-    const voteClasses = 'voteAverage '.concat(this.getVoteColorClass(voteAverage));
+    const voteClasses = 'vote-average '.concat(this.getVoteColorClass(voteAverage));
 
     let dateFormatted;
     try {

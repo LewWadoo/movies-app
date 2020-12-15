@@ -20,3 +20,7 @@
     height: 40px;
     align-self: flex-start;
 }
+
+ul {
+    padding: 0;
+}

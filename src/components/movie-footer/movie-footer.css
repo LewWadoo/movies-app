@@ -1,12 +1,10 @@
 .movie-description {
-/* @font-size-sm: 12px */
 
 font-family: Inter;
 font-style: normal;
 font-weight: normal;
 font-size: 12px;
 line-height: 22px;
-/* or 183% */
 
 color: #000000;
 margin-bottom: auto;
@@ -20,4 +18,5 @@ margin-bottom: auto;
 
 .movie-rate {
     align-self: flex-end;
+    flex-wrap: nowrap;
 }

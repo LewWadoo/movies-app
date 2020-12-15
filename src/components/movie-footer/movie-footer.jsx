@@ -39,7 +39,14 @@ export default class Movie extends React.Component {
     return (
       <div className="movie-footer movie-stats">
         <p className="movie-description">{this.truncateDescription(overview)}</p>
-        <Rate count={10} allowHalf onChange={(value) => onRate(value, id)} value={rating} className="movie-rate" />
+        <Rate
+          count={10}
+          allowHalf
+          onChange={(value) => onRate(value, id)}
+          value={rating}
+          className="movie-rate"
+          allowClear={false}
+        />
       </div>
     );
   }

@@ -112,7 +112,7 @@ export default class App extends React.Component {
               totalResults,
               isLoading: false,
               error: true,
-              message: 'Ты неудачник! Таких фильмов нет вообще!',
+              message: 'Sorry, no films match the query!',
             });
           }
         } else {

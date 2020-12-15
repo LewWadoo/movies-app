@@ -7,7 +7,7 @@
     filter: drop-shadow(0px 4px 12px rgba(0, 0, 0, 0.15));
     margin: 16px;
     background-color: #fff;
-overflow: hidden;
+    overflow: hidden;
 }
 
 @media screen and (max-width: 1000px) {
@@ -18,23 +18,20 @@ overflow: hidden;
 }
 
 .movie-img {
-    width: 30%;
-    align-self: flex-start;
-    object-fit: contain;
-    /* height: 281px; */
+    width: 150px;
+    object-fit: cover;
 }
 
 @media screen and (max-width: 1000px) {
-.movie-img {
-    width: 20%;
-}
+    .movie-img {
+	width: 20%;
+    }
 }
 
 .movie-desktop-layout {
     display: flex;
     flex-direction: column;
     flex-grow: 1;
-    /* margin: 16px; */
 }
 
 .movie-mobile-layout {
