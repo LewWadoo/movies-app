@@ -6,7 +6,7 @@
     "@testing-library/jest-dom": "^5.11.5",
     "@testing-library/react": "^11.1.0",
     "@testing-library/user-event": "^12.1.10",
-    "antd": "^4.7.3",
+    "antd": "^4.24.3",
     "date-fns": "^2.16.1",
     "lodash": "^4.17.20",
     "prop-types": "^15.7.2",
